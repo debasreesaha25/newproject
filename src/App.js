@@ -1,23 +1,44 @@
 import logo from './logo.svg';
 import './App.css';
+import {useEffect,useState} from 'react';
+import {AppBar,Toolbar,Typography,ListItemText} from '@material-ui/core';
 
 function App() {
+   const [repositiry,setRespositary]=useState([]);
+   
+   useEffect(()=>{
+    fetch(`https://api.github.com/users/debasreesaha25/repos`)
+    .then((res)=>res.json())
+    .then(actualres=>{
+      console.log(actualres);
+      setRespositary(actualres);
+    })
+  },[])
+     console.log(repositiry);
+  
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+        <AppBar position='static'>
+          <Toolbar>
+          <Typography variant="h6" style={{margin:"0px auto"}}>
+              My Repositaries 
+           </Typography>
+          </Toolbar>
+        </AppBar> 
+        <div>
+          <ol>
+          {repositiry && repositiry.map((repo)=>{return(
+             <ListItemText>
+            <li key={repo.id}><a href={repo.clone_url}>{repo.clone_url}</a></li>
+            </ListItemText>
+          )
+            })
+            }
+            </ol>
+        
+        </div>
+        {/* <div>{repositiry[4].name}</div> */}
+
     </div>
   );
 }
